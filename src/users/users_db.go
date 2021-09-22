@@ -29,6 +29,7 @@ func createUser(username, password, email string) (User, error) {
 	return user, nil
 }
 
+// LoadUserById loads the user with the given id from the database and returns it with or returns an empty User and false if the user was not found
 func LoadUserById(id uint64) (User, bool) {
 	conn, err := database.GetDb().GetConnection()
 	if err != nil {
@@ -83,7 +84,7 @@ func loadUsersBy(field string, value interface{}) ([]User, error) {
 	return foundUsers, nil
 }
 
-func checkUserExistence(username, email string) (string, bool, error) {
+func checkUserExistence(username, email string) (field string, exists bool, err error) {
 	conn, err := database.GetDb().GetConnection()
 	if err != nil {
 		return "", false, err
@@ -94,7 +95,6 @@ func checkUserExistence(username, email string) (string, bool, error) {
 	err = conn.QueryRow("SELECT EXISTS(SELECT 1 FROM users WHERE username = $1);", username).Scan(&exist)
 	if err != nil {
 		if err != sql.ErrNoRows {
-			fmt.Println("ici")
 			return "", false, err
 		}
 	}
@@ -105,7 +105,6 @@ func checkUserExistence(username, email string) (string, bool, error) {
 	err = conn.QueryRow(fmt.Sprintf("SELECT EXISTS(SELECT 1 FROM users WHERE email = '%s')", email)).Scan(&exist)
 	if err != nil {
 		if err != sql.ErrNoRows {
-			fmt.Println("là")
 			return "", false, err
 		}
 	}

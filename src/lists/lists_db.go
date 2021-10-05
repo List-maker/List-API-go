@@ -31,19 +31,21 @@ func QueryUserLists(userId uint64) []uint64 {
 	}
 	defer database.CloseConnection(conn)
 
-	row := conn.QueryRow("SELECT id FROM user_lists WHERE editors::jsonb @> $1 OR viewers::jsonb @> $1;", userId)
-	if err = row.Err(); err != nil {
+	rows, err := conn.Query("SELECT id FROM user_lists WHERE editors::jsonb @> $1 OR viewers::jsonb @> $1;", userId)
+	if err != nil {
 		utils.PrintError(err)
 		return []uint64{}
 	}
 
 	var allId []uint64
-	err = row.Scan(&allId)
-	if err != nil {
-		if err != sql.ErrNoRows {
+	for rows.Next() {
+		var listId uint64
+		err = rows.Scan(&listId)
+		if err != nil {
 			utils.PrintError(err)
+			return []uint64{}
 		}
-		return []uint64{}
+		allId = append(allId, listId)
 	}
 	return allId
 }

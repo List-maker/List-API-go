@@ -33,11 +33,11 @@ func initRoutes() *mux.Router {
 
 	// Lists
 	r.HandleFunc("/api/list", users.UserRequired(lists.CreateList)).Methods(http.MethodPost)
+	r.HandleFunc("/api/list/user", users.UserRequired(lists.GetUserLists)).Methods(http.MethodGet)
 	r.HandleFunc("/api/list/{id}", users.UserRequired(lists.GetList)).Methods(http.MethodGet)
 	r.HandleFunc("/api/list/{id}", users.UserRequired(lists.UpdateList)).Methods(http.MethodPut)
 	r.HandleFunc("/api/list/{id}/pin", users.UserRequired(lists.PinList)).Methods(http.MethodPut)
 	r.HandleFunc("/api/list/{id}", users.UserRequired(lists.DeleteList)).Methods(http.MethodDelete)
-	r.HandleFunc("api/list/user/{id}", users.UserRequired(lists.GetUserLists)).Methods(http.MethodGet)
 
 	// Items
 	r.HandleFunc("/api/list/{list_id}/add", users.UserRequired(items.CreateItem)).Methods(http.MethodPost)

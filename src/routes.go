@@ -37,6 +37,7 @@ func initRoutes() *mux.Router {
 	r.HandleFunc("/api/list/{id}", users.UserRequired(lists.UpdateList)).Methods(http.MethodPut)
 	r.HandleFunc("/api/list/{id}/pin", users.UserRequired(lists.PinList)).Methods(http.MethodPut)
 	r.HandleFunc("/api/list/{id}", users.UserRequired(lists.DeleteList)).Methods(http.MethodDelete)
+	r.HandleFunc("api/list/user/{id}", users.UserRequired(lists.GetUserLists)).Methods(http.MethodGet)
 
 	// Items
 	r.HandleFunc("/api/list/{list_id}/add", users.UserRequired(items.CreateItem)).Methods(http.MethodPost)
@@ -51,6 +52,5 @@ func initRoutes() *mux.Router {
 	r.HandleFunc("/api/invitation/{id}", users.UserRequired(invitations.GetInvit)).Methods(http.MethodGet)
 	r.HandleFunc("/api/invitation/{id}/accept", users.UserRequired(invitations.AcceptInvit)).Methods(http.MethodPut)
 	r.HandleFunc("/api/invitation/{id}/delete", users.UserRequired(invitations.DeleteInvit)).Methods(http.MethodPut)
-
 	return r
 }

@@ -24,6 +24,30 @@ func createList(userId uint64, listName string) (uint64, error) {
 	return newListId, nil
 }
 
+func QueryUserLists(userId uint64) []uint64 {
+	conn, err := database.GetDb().GetConnection()
+	if err != nil {
+		return []uint64{}
+	}
+	defer database.CloseConnection(conn)
+
+	row := conn.QueryRow("SELECT id FROM user_lists WHERE editors::jsonb @> $1 OR viewers::jsonb @> $1;", userId)
+	if err = row.Err(); err != nil {
+		utils.PrintError(err)
+		return []uint64{}
+	}
+
+	var allId []uint64
+	err = row.Scan(&allId)
+	if err != nil {
+		if err != sql.ErrNoRows {
+			utils.PrintError(err)
+		}
+		return []uint64{}
+	}
+	return allId
+}
+
 func LoadListById(listId uint64) (List, bool) {
 	conn, err := database.GetDb().GetConnection()
 	if err != nil {

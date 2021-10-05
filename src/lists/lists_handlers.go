@@ -52,6 +52,26 @@ func GetList(w http.ResponseWriter, r *http.Request, user users.User) {
 	utils.Prettier(w, "list informations", list.ExportFor(user.Id), http.StatusOK)
 }
 
+func GetUserLists(w http.ResponseWriter, r *http.Request, user users.User) {
+	userId, found, valid := utils.ExtractUintFromRequest("user", r)
+	if !found {
+		utils.Prettier(w, "no user id provided", nil, http.StatusBadRequest)
+		return
+	}
+	if !valid {
+		utils.Prettier(w, "invalid user id", nil, http.StatusBadRequest)
+		return
+	}
+
+	lists := QueryUserLists(userId)
+	if len(lists) == 0 {
+		utils.Prettier(w, "no user lists found", nil, http.StatusBadRequest)
+		return
+	}
+
+	utils.Prettier(w, "all user lists", lists, http.StatusOK)
+}
+
 func UpdateList(w http.ResponseWriter, r *http.Request, user users.User) {
 	listId, found, valid := utils.ExtractUintFromRequest("id", r)
 	if !found {

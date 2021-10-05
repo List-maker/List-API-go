@@ -35,7 +35,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	// check if user exist
 	if len(foundUsers) == 0 {
-		utils.Prettier(w, "bad login or password !", nil, http.StatusUnauthorized)
+		utils.Prettier(w, "user doesnt exist!", nil, http.StatusUnauthorized)
 		return
 	}
 
@@ -48,7 +48,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	// check hash password
 	compareErr := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 	if compareErr != nil {
-		utils.Prettier(w, "bad login or password !", nil, http.StatusUnauthorized)
+		utils.Prettier(w, "invalid password !", nil, http.StatusUnauthorized)
 		return
 	}
 
@@ -93,6 +93,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 
 	// Check username validity
 	username := r.FormValue("username")
+	fmt.Println("Username: ", username)
 	if invalidUserNameError := utils.IsUserNameValid(username); invalidUserNameError != nil {
 		utils.Prettier(w, invalidUserNameError.Error(), nil, http.StatusBadRequest)
 		return

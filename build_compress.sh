@@ -1,6 +1,7 @@
 #!/bin/bash -eu
 
-OUTPUT_FILENAME="ListsBack"
+VERSION="0.1.0"
+OUTPUT_FILENAME="ListsBack-$VERSION"
 OUTPUT_DIR="compiled"
 
 echo "Building $OUTPUT_FILENAME ..."

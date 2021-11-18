@@ -31,7 +31,7 @@ func CreateItem(w http.ResponseWriter, r *http.Request, user users.User) {
 
 	_ = r.ParseForm()
 	name := r.FormValue("name")
-	if err := utils.IsNameValid(name); err != nil {
+	if err := utils.IsItemNameValid(name); err != nil {
 		utils.Prettier(w, err.Error(), nil, http.StatusBadRequest)
 		return
 	}
@@ -82,16 +82,12 @@ func UpdateItem(w http.ResponseWriter, r *http.Request, user users.User) {
 
 	_ = r.ParseForm()
 	name := r.FormValue("name")
-	if name == "" {
-		utils.Prettier(w, "no name provided", nil, http.StatusBadRequest)
+	if err = utils.IsItemNameValid(name); err != nil {
+		utils.Prettier(w, err.Error(), nil, http.StatusBadRequest)
 		return
 	}
 	if name == item.Name {
 		utils.Prettier(w, "the new name cannot be the same as the old !", nil, http.StatusBadRequest)
-		return
-	}
-	if err = utils.IsNameValid(name); err != nil {
-		utils.Prettier(w, err.Error(), nil, http.StatusBadRequest)
 		return
 	}
 

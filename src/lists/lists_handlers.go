@@ -13,7 +13,7 @@ func CreateList(w http.ResponseWriter, r *http.Request, user users.User) {
 		utils.Prettier(w, "no name provided", nil, http.StatusBadRequest)
 		return
 	}
-	if err := utils.IsNameValid(listName); err != nil {
+	if err := utils.IsListNameValid(listName); err != nil {
 		utils.Prettier(w, err.Error(), nil, http.StatusBadRequest)
 		return
 	}
@@ -94,7 +94,7 @@ func UpdateList(w http.ResponseWriter, r *http.Request, user users.User) {
 		utils.Prettier(w, "the new name cannot be the same as the old !", nil, http.StatusBadRequest)
 		return
 	}
-	if err := utils.IsNameValid(name); err != nil {
+	if err := utils.IsListNameValid(name); err != nil {
 		utils.Prettier(w, err.Error(), nil, http.StatusBadRequest)
 		return
 	}

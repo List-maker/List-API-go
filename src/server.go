@@ -11,9 +11,11 @@ import (
 	"os"
 )
 
+const version = "0.1.0"
+
 func main() {
 
-	fmt.Println("\nStarting ...\n")
+	fmt.Print("\nStarting Lists API V", version, " ...\n\n")
 
 	configPath := flag.String("config", "", "The path of the configuration file")
 	flag.Parse()

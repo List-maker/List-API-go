@@ -65,9 +65,16 @@ func IsPasswordValid(password string) error {
 	return nil
 }
 
-func IsNameValid(name string) error {
+func IsListNameValid(name string) error {
 	if len(name) < 1 || len(name) > 255 {
 		return errors.New("the length of the name must be included between 0 and 255 characters")
+	}
+	return nil
+}
+
+func IsItemNameValid(name string) error {
+	if len(name) > 255 {
+		return errors.New("the length of the name must not exceed 255 characters")
 	}
 	return nil
 }
